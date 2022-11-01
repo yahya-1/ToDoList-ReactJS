@@ -1,0 +1,10 @@
+.page-container {
+  background-color: #EAEAEA;
+  min-height: 100vh;
+  max-width: 100vw;
+  overflow: hidden;
+}
+
+.body-todo {
+  background-color: #dfe4ea;
+}
