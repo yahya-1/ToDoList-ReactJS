@@ -13,19 +13,17 @@ export const getTodo = () => {
 }
 
 
-export const getCompletedTodo = (value) => {
+export const getCompletedTodo = () => {
 
     return {
-        type: "filterStatus",
-        payload: value
+        type: "filterCompleted",
     }
 }
 
 
-export const getPendingTodo = (value) => {
+export const getPendingTodo = () => {
     return {
-        type: "filterStatus",
-        payload: value
+        type: "filterPending",
     }
 }
 

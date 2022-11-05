@@ -6,11 +6,9 @@ function setDataLocalStorage(result) {
     localStorage.setItem("todos", JSON.stringify(result));
 }
 
-function getDataLocalStorage(value) {
-    if (value === "all") {
-        JSON.parse(localStorage.getItem("todos"))
-    }
-}
+// function getDataLocalStorage() {
+//         JSON.parse(localStorage.getItem("todos"))
+// }
 const todoReducer = (state = initialData, action) => {
 
     switch (action.type) {
@@ -22,7 +20,6 @@ const todoReducer = (state = initialData, action) => {
 
         case "GET_TODO": {
             let result = [...state]
-            getDataLocalStorage(action.status);
             return result;
         }
 

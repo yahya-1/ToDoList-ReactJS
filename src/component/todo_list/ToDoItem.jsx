@@ -1,65 +1,15 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { Checkbox, List, Tag, Col, Row, Divider, Modal, Input, Popconfirm, message, notification } from 'antd'
+import { Checkbox, List, Tag, Col, Row, Divider, Modal, Input, Popconfirm } from 'antd'
 import "./style.css"
 import { CheckOutlined, DeleteOutlined, EditOutlined, MinusCircleOutlined } from '@ant-design/icons'
-import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { deleteTodo, updateTodo } from '../../redux/actionListToDo'
+import React from 'react'
+
+import useToDoItem from '../hooks/useToDoItem'
 
 
 const ToDoItem = ({ item }) => {
 
-    const selector = useSelector((state) => state.todoReducer)
-    const [loading, setLoading] = useState(item.completed)
-    const dispatch = useDispatch()
-    const onChange = (e) => {
-        if (e.target.checked === true) {
-            let itemCheck = selector.find(ele => ele.id === item.id)
-            setLoading(!loading)
-            localStorage.setItem("todos", JSON.stringify([...selector, itemCheck.completed = true].slice(0, -1)))
-            setLoading(!loading)
-        } else {
-            let itemCheck = selector.find(ele => ele.id === item.id)
-            setLoading(!loading)
-            localStorage.setItem("todos", JSON.stringify([...selector, itemCheck.completed = false].slice(0, -1)))
-            setLoading(!loading)
-        }
-    };
-
-    const [open, setOpen] = useState(false);
-    const [confirmLoading, setConfirmLoading] = useState(false);
-    const [modalText, setModalText] = useState(item.name);
-
-    const openNotificationWithIcon = (type) => {
-        notification[type]({
-            message: 'The task has been modified',
-        });
-    };
-    const showModal = () => {
-        setOpen(true);
-
-    };
-    const handleOk = () => {
-        setConfirmLoading(true);
-        setTimeout(() => {
-            setOpen(false);
-            setConfirmLoading(false);
-            openNotificationWithIcon("success")
-        }, 2000);
-        dispatch(updateTodo({
-            id: item.id,
-            name: modalText,
-            completed: item.completed
-        }))
-    };
-    const handleCancel = () => {
-        setOpen(false);
-    };
-    const confirm = (e) => {
-        message.success('The task has been deleted');
-        dispatch(deleteTodo(selector.indexOf(item)))
-    };
-
+    const [onChange, loading, showModal, handleCancel, confirmLoading, modalText, open, confirm, handleOk, handelModalText] = useToDoItem(item);
     return (
         <>
             <List.Item>
@@ -68,20 +18,24 @@ const ToDoItem = ({ item }) => {
                     {item.name}</Checkbox>
 
                 <Row >
-                    <Col className='contener-del '>
-                        <EditOutlined style={{ color: "#55efc4" }} onClick={showModal}  />
+                    <Col className='contener-del ' onClick={showModal}>
+                        <EditOutlined style={{ color: "#55efc4" }} />
                     </Col>
-                    <Col className='contener-del ms-2 '>
-                        <Popconfirm
-                            title="Are you sure to delete this task?"
-                            onConfirm={confirm}
-                            okText="Yes"
-                            cancelText="No"
-                        >
-                            <a href='#'><DeleteOutlined style={{ color: "#d63031" }} /></a>
-                        </Popconfirm>
 
-                    </Col>
+                    <Popconfirm
+                        title="Are you sure to delete this task?"
+                        okText="Yes"
+                        onConfirm={confirm}
+                        cancelText="No"
+                    >
+                        <a href='#'>
+                            <Col className='contener-del ms-2 ' >
+                                <DeleteOutlined style={{ color: "#d63031" }} />
+                            </Col>
+                        </a>
+                    </Popconfirm>
+
+
                 </Row>
             </List.Item>
             <Divider />
@@ -92,7 +46,7 @@ const ToDoItem = ({ item }) => {
                 confirmLoading={confirmLoading}
                 onCancel={handleCancel}
             >
-                <Input value={modalText} onChange={(e) => setModalText(e.target.value)} placeholder="Task modification" />
+                <Input value={modalText} onChange={((e) => handelModalText(e))} placeholder="Task modification" />
             </Modal>
 
 
